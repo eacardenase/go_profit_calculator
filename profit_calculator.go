@@ -5,22 +5,30 @@ import "fmt"
 func main() {
 	fmt.Println("Welcome to Profit Calculator")
 
-	var revenue, expenses, taxRate float64
+	revenue := getUserInput("Enter revenue: ")
+	expenses := getUserInput("Enter expenses: ")
+	taxRate := getUserInput("Enter tax rate (%): ")
 
-	fmt.Print("Enter revenue: ")
-	fmt.Scan(&revenue)
-
-	fmt.Print("Enter expenses: ")
-	fmt.Scan(&expenses)
-
-	fmt.Print("Enter tax rate (%): ")
-	fmt.Scan(&taxRate)
-
-	earningsBeforeTax := revenue - expenses
-	profit := earningsBeforeTax * (1 - taxRate/100)
-	ratio := earningsBeforeTax / profit
+	earningsBeforeTax, profit, ratio := calculateFinantials(revenue, expenses, taxRate)
 
 	fmt.Printf("Earnings Before Tax: %.2f\n", earningsBeforeTax)
 	fmt.Printf("Profit: %.2f\n", profit)
 	fmt.Printf("Profit Ratio: %.2f\n", ratio)
+}
+
+func getUserInput(text string) float64 {
+	var userInput float64
+
+	fmt.Print(text)
+	fmt.Scan(&userInput)
+
+	return userInput
+}
+
+func calculateFinantials(revenue, expenses, taxRate float64) (float64, float64, float64) {
+	earningsBeforeTax := revenue - expenses
+	profit := earningsBeforeTax * (1 - taxRate/100)
+	ratio := earningsBeforeTax / profit
+
+	return earningsBeforeTax, profit, ratio
 }
