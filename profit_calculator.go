@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
 )
 
 func main() {
@@ -57,5 +58,15 @@ func calculateFinantials(revenue, expenses, taxRate float64) (float64, float64, 
 	profit := earningsBeforeTax * (1 - taxRate/100)
 	ratio := earningsBeforeTax / profit
 
+	storeResults(earningsBeforeTax, profit, ratio)
+
 	return earningsBeforeTax, profit, ratio
+}
+
+func storeResults(ebt, profit, ratio float64) {
+	results := fmt.Sprintf(`Earnings Before Tax: %.2f
+Profit: %.2f
+Profit Ratio: %.2f`, ebt, profit, ratio)
+
+	os.WriteFile("results.txt", []byte(results), 0644)
 }
