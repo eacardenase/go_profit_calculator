@@ -1,13 +1,36 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func main() {
 	fmt.Println("Welcome to Profit Calculator")
 
-	revenue := getUserInput("Enter revenue: ")
-	expenses := getUserInput("Enter expenses: ")
-	taxRate := getUserInput("Enter tax rate (%): ")
+	revenue, revenueErr := getUserInput("Enter revenue: ")
+
+	if revenueErr != nil {
+		fmt.Println("Error:", revenueErr)
+
+		return
+	}
+
+	expenses, expensesErr := getUserInput("Enter expenses: ")
+
+	if expensesErr != nil {
+		fmt.Println("Error:", expensesErr)
+
+		return
+	}
+
+	taxRate, taxErr := getUserInput("Enter tax rate (%): ")
+
+	if taxErr != nil {
+		fmt.Println("Error:", taxErr)
+
+		return
+	}
 
 	earningsBeforeTax, profit, ratio := calculateFinantials(revenue, expenses, taxRate)
 
@@ -16,13 +39,17 @@ func main() {
 	fmt.Printf("Profit Ratio: %.2f\n", ratio)
 }
 
-func getUserInput(text string) float64 {
+func getUserInput(text string) (float64, error) {
 	var userInput float64
 
 	fmt.Print(text)
 	fmt.Scan(&userInput)
 
-	return userInput
+	if userInput <= 0 {
+		return 0, errors.New("value must be a positive number")
+	}
+
+	return userInput, nil
 }
 
 func calculateFinantials(revenue, expenses, taxRate float64) (float64, float64, float64) {
